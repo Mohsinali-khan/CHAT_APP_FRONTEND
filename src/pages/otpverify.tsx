@@ -1,46 +1,67 @@
-import { useState } from "react";
-import { MessageSquareMore, ShieldCheck } from "lucide-react";
+import { useEffect, useState } from "react";
 import Button from "../components/CustomButton";
+import { useAuthStore } from "../store/authStore";
+import toast from "react-hot-toast";
+import { useLocation, useNavigate } from "react-router-dom";
+import OtpInput from "react-otp-input";
+import AuthWrapper from "../components/CustomAuthWrapper";
 
 const OtpVerificationForm = () => {
-	const [otp, setOtp] = useState(["", "", "", ""]);
+  const navigate = useNavigate();
+  const { verifyOTP, verifyOtpLoading } = useAuthStore();
+  const location = useLocation();
+  const [otp, setOtp] = useState("");
 
-	const handleChange = (index: number, value: string) => {
-		if (!isNaN(Number(value)) && value.length <= 1) {
-			const newOtp = [...otp];
-			newOtp[index] = value;
-			setOtp(newOtp);
-		}
-	};
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const { message, success } = await verifyOTP(
+      Number(otp),
+      location.state.email
+    );
+    if (success) {
+      toast.success(message);
+      navigate("/");
+    } else {
+      toast.error(message);
+    }
+  };
 
-	return (
-		<div className="bg-primary flex items-center justify-center min-h-screen">
-			<div className="bg-white relative rounded-lg shadow-lg p-8 w-80">
-				<div className="absolute -top-12 left-1/2 transform -translate-x-1/2 bg-primary border-8 text-white rounded-full w-20 h-20 text-lg font-bold">
-					<div className="flex justify-center items-center my-3">
-						<MessageSquareMore className="animate-pulse" size={40} />
-					</div>
-				</div>
-				<h2 className="text-center text-lg font-semibold mb-4">
-					Enter OTP Code
-				</h2>
-				<div className="flex justify-between mb-6">
-					{otp.map((digit, index) => (
-						<input
-							key={index}
-							type="text"
-							maxLength={1}
-							className="w-12 h-12 border border-gray-300 rounded text-center text-lg"
-							value={digit}
-							onChange={(e) => handleChange(index, e.target.value)}
-						/>
-					))}
-				</div>
+  useEffect(() => {
+    if (!location?.state?.email) {
+      navigate("/login");
+    }
+  }, [location, navigate])
 
-				<Button type="submit">Verify OTP</Button>
-			</div>
-		</div>
-	);
+  return (
+    <AuthWrapper>
+      <form onSubmit={handleSubmit} className="relative rounded-l p-8">
+        <h2 className="text-center text-lg font-semibold mb-4">
+          Enter OTP Code
+        </h2>
+
+        <OtpInput
+          value={otp}
+          numInputs={6}
+          onChange={setOtp} // Explicit handler
+          renderSeparator={
+            <span className="mx-2 text-lg font-semibold">-</span>
+          }
+          renderInput={(props) => (
+            <input
+              {...props}
+              className="!w-10 !h-10 text-center border-2 border-gray-300 rounded-lg focus:outline-none focus:border-blue-500 text-lg"
+            />
+          )}
+        />
+
+        <div className="mt-5">
+          <Button loading={verifyOtpLoading} type="submit">
+            Verify
+          </Button>
+        </div>
+      </form>
+    </AuthWrapper>
+  );
 };
 
 export default OtpVerificationForm;
