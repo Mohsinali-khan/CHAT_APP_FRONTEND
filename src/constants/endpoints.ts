@@ -3,4 +3,5 @@ export const AUTH_ENDPOINTS = {
 	SIGNUP: "/auth/signup",
 	LOGOUT: "/auth/logout",
 	CHECK_AUTH: "/auth/me",
+	VERIFY_OTP:"/auth/verify-otp"
 };
