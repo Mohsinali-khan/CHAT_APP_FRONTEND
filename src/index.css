@@ -6,18 +6,31 @@ body {
 }
 
 :root {
-	--primary-color: #4a90e2;
-	--secondary-color: #50e3c2;
-	--background-color: #f5f7fa;
-	--dark-background: #1e2a38;
-	--message-sent: #dcf8c6;
-	--message-received: #eaeaea;
-	--text-primary: #1f2937;
-	--text-secondary: #6b7280;
-	--error-color: #ff3b30;
-	--success-color: #34d399;
+	/* Core Grok Palette */
+	--primary-color: #00aaff; /* Bright cosmic blue - Grok’s energetic core */
+	--secondary-color: #ff4dff; /* Vivid magenta - playful, bold, AI personality */
+	--background-color: #fafafa; /* Off-white - clean, neutral, timeless */
+	--dark-background: #121c2d; /* Deep starry night - spacey, mysterious */
+
+	/* Messaging Colors */
+	--message-sent: #ccefff; /* Pale sky blue - user’s voice, clear and light */
+	--message-received: #e0e7ff; /* Soft lavender-gray - Grok’s thoughtful replies */
+
+	/* Text Colors */
+	--text-primary: #0d1321; /* Near-black blue - sharp, grounded */
+	--text-secondary: #5c6f8c; /* Cool steel blue - subtle, supportive */
+
+	/* Status Colors */
+	--error-color: #ff3366; /* Neon pink-red - striking, urgent */
+	--success-color: #33ff99; /* Electric green - vibrant, positive */
+
+	/* Accent Colors (Grok’s Cosmic Flair) */
+	--accent-glow: #80d4ff; /* Icy blue glow - futuristic highlights */
+	--cosmic-dark: #0a0f1f; /* Void-like blue-black - infinite depth */
+	--nebula-hint: #ff66cc; /* Pinkish-purple - a nod to cosmic nebulae */
 }
 
+/* Utility Classes */
 .bg-primary {
 	background-color: var(--primary-color);
 }
@@ -40,4 +53,20 @@ body {
 
 .text-secondary {
 	color: var(--text-secondary);
+}
+
+.bg-cosmic-dark {
+	background-color: var(--cosmic-dark);
+}
+
+.text-accent-glow {
+	color: var(--accent-glow);
+}
+
+.bg-nebula-hint {
+	background-color: var(--nebula-hint);
+}
+
+.text-nebula-hint {
+	color: var(--nebula-hint);
 }
