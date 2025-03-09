@@ -11,7 +11,7 @@ import OtpVerificationForm from "../pages/otpverify";
 import ForgetPassoword from "../pages/forgetPassword";
 import { useAuthStore } from "../store/authStore";
 import ChatScreen from "../pages/chat/ChatScreen";
-import { MessageCircleMore } from "lucide-react";
+import ResetPassword from "../pages/ResetPassword";
 
 const Navigation = () => {
 	const { isAuthenticate } = useAuthStore();
@@ -29,6 +29,11 @@ const Navigation = () => {
 			component: <ForgetPassoword />,
 			path: "/forget-password",
 			label: "Forgot Password",
+		},
+		{
+			component: <ResetPassword />,
+			path: "/reset-password",
+			label: "reset-password",
 		},
 	];
 
