@@ -1,0 +1,43 @@
+@import "tailwindcss";
+/* @import url("https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap"); */
+
+body {
+	font-family: "Roboto", sans-serif;
+}
+
+:root {
+	--primary-color: #4a90e2;
+	--secondary-color: #50e3c2;
+	--background-color: #f5f7fa;
+	--dark-background: #1e2a38;
+	--message-sent: #dcf8c6;
+	--message-received: #eaeaea;
+	--text-primary: #1f2937;
+	--text-secondary: #6b7280;
+	--error-color: #ff3b30;
+	--success-color: #34d399;
+}
+
+.bg-primary {
+	background-color: var(--primary-color);
+}
+
+.text-primary {
+	color: var(--primary-color);
+}
+
+.bg-message-sent {
+	background-color: var(--message-sent);
+}
+
+.bg-message-received {
+	background-color: var(--message-received);
+}
+
+.bg-dark {
+	background-color: var(--dark-background);
+}
+
+.text-secondary {
+	color: var(--text-secondary);
+}

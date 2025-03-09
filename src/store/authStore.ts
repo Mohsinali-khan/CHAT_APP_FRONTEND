@@ -1,102 +1,158 @@
 import { create } from "zustand";
 import { AUTH_ENDPOINTS } from "../constants/endpoints";
 import { api_instance } from "../config/api";
-import toast from "react-hot-toast";
-
-interface User {
-	id: string;
-	email: string;
-}
+import { AuthResponse, User } from "../types/auth";
+import { AxiosError } from "axios";
 
 interface AuthState {
 	user: User | null;
+	isAuthenticate: boolean;
 	message: string | null;
 
-	// Loading states
+	// Manage loading states
 	loginLoading: boolean;
 	signupLoading: boolean;
 	logoutLoading: boolean;
 	authLoading: boolean;
+	verifyOtpLoading: boolean;
 
-	// Actions
-	login: (email: string, password: string) => Promise<void>;
-	signup: (username: string, email: string, password: string) => Promise<void>;
-	logout: () => Promise<void>;
+	// manage functions
+	login: (
+		email: string,
+		password: string
+	) => Promise<{ success: boolean; message: string }>;
+	verifyOTP: (
+		otp: number,
+		email: string
+	) => Promise<{ success: boolean; message: string }>;
+	signup: (
+		username: string,
+		email: string,
+		password: string
+	) => Promise<{ success: boolean; message: string }>;
+	logout: () => Promise<{ success: boolean; message: string }>;
 	checkAuth: () => Promise<void>;
 }
 
-export const useAuthStore = create<AuthState>((set) => ({
-	user: null,
-	message: null, // Initialize message state
+export const useAuthStore = create<AuthState>((set) => {
+	const handleError = (error: unknown, defaultMessage: string) => {
+		return error instanceof AxiosError
+			? error.response?.data?.message || defaultMessage
+			: defaultMessage;
+	};
 
-	loginLoading: false,
-	signupLoading: false,
-	logoutLoading: false,
-	authLoading: false,
+	const setLoading = (key: keyof AuthState, value: boolean) =>
+		set({ [key]: value });
 
-	login: async (email, password) => {
-		set({ loginLoading: true, message: null });
-		try {
-			const { data } = await api_instance.post(AUTH_ENDPOINTS.LOGIN, {
-				email,
-				password,
-			});
-			set({ user: data.user, message: data.message });
-			toast.success(data.message || "Login successful!");
-		} catch (err: any) {
-			const errorMessage = err.response?.data?.message || "Login failed";
-			toast.error(errorMessage);
-			throw new Error(errorMessage);
-		} finally {
-			set({ loginLoading: false });
-		}
-	},
+	return {
+		// initial states
+		user: null,
+		isAuthenticate: false,
+		message: null,
+		loginLoading: false,
+		signupLoading: false,
+		logoutLoading: false,
+		authLoading: true,
+		verifyOtpLoading: false,
 
-	signup: async (username, email, password) => {
-		set({ signupLoading: true, message: null });
-		try {
-			const { data } = await api_instance.post(AUTH_ENDPOINTS.SIGNUP, {
-				username,
-				email,
-				password,
-			});
-			set({ user: data.data.user, message: data.message }); // Save message
-			toast.success(data.message || "Signup successful!");
-		} catch (err: any) {
-			const errorMessage = err.response?.data?.message || "Signup failed";
-			toast.error(errorMessage);
-			throw new Error(errorMessage);
-		} finally {
-			set({ signupLoading: false });
-		}
-	},
+		login: async (email, password) => {
+			setLoading("loginLoading", true);
+			try {
+				const { data } = await api_instance.post<AuthResponse>(
+					AUTH_ENDPOINTS.LOGIN,
+					{ email, password }
+				);
+				set({
+					user: data.data.user,
+					isAuthenticate: true,
+					message: data.message,
+				});
+				return { success: true, message: data.message || "Login successful!" };
+			} catch (error) {
+				return { success: false, message: handleError(error, "Login failed") };
+			} finally {
+				setLoading("loginLoading", false);
+			}
+		},
 
-	logout: async () => {
-		set({ logoutLoading: true, message: null });
-		try {
-			const { data } = await api_instance.post(AUTH_ENDPOINTS.LOGOUT);
-			set({ user: null, message: data.message }); // Save message
-			toast.success(data.message || "Logged out successfully!");
-		} catch (err: any) {
-			const errorMessage = err.response?.data?.message || "Logout failed";
-			toast.error(errorMessage);
-			throw new Error(errorMessage);
-		} finally {
-			set({ logoutLoading: false });
-		}
-	},
+		signup: async (username, email, password) => {
+			setLoading("signupLoading", true);
+			try {
+				const { data } = await api_instance.post<AuthResponse>(
+					AUTH_ENDPOINTS.SIGNUP,
+					{ username, email, password }
+				);
+				set({
+					user: data.data.user,
+					isAuthenticate: true,
+					message: data.message,
+				});
+				return { success: true, message: data.message || "Signup successful!" };
+			} catch (error) {
+				return { success: false, message: handleError(error, "Signup failed") };
+			} finally {
+				setLoading("signupLoading", false);
+			}
+		},
 
-	checkAuth: async () => {
-		set({ authLoading: true, message: null });
-		try {
-			const { data } = await api_instance.get(AUTH_ENDPOINTS.CHECK_AUTH);
-			set({ user: data.user, message: data.message }); // Save message
-		} catch (err: any) {
-			const errorMessage = "Session expired, please login again!";
-			toast.error(errorMessage);
-			set({ user: null, message: errorMessage });
-		} finally {
-			set({ authLoading: false });
-		}
-	},
-}));
+		verifyOTP: async (otp, email) => {
+			setLoading("verifyOtpLoading", true);
+			try {
+				const { data } = await api_instance.post<AuthResponse>(
+					AUTH_ENDPOINTS.VERIFY_OTP,
+					{ otp, email }
+				);
+				set({
+					user: data.data.user,
+					isAuthenticate: true,
+					message: data.message,
+				});
+				return {
+					success: true,
+					message: data.message || "OTP Verified successfully!",
+				};
+			} catch (error) {
+				return {
+					success: false,
+					message: handleError(error, "Verify OTP failed"),
+				};
+			} finally {
+				setLoading("verifyOtpLoading", false);
+			}
+		},
+
+		logout: async () => {
+			setLoading("logoutLoading", true);
+			try {
+				await api_instance.get(AUTH_ENDPOINTS.LOGOUT);
+				set({ user: null, isAuthenticate: false, message: null });
+				return { success: true, message: "Logged out successfully!" };
+			} catch (error) {
+				return { success: false, message: handleError(error, "Logout failed") };
+			} finally {
+				setLoading("logoutLoading", false);
+			}
+		},
+
+		checkAuth: async () => {
+			setLoading("authLoading", true);
+			try {
+				const { data } = await api_instance.get(AUTH_ENDPOINTS.CHECK_AUTH);
+				set({
+					isAuthenticate: true,
+					user: data.data.user,
+					message: data.message,
+				});
+			} catch (error) {
+				console.log("error", error);
+				set({
+					user: null,
+					isAuthenticate: false,
+					message: handleError(error, "Session expired, please login again!"),
+				});
+			} finally {
+				setLoading("authLoading", false);
+			}
+		},
+	};
+});
