@@ -117,6 +117,16 @@ const SignupForm = () => {
 								className="text-red-500 text-xs ms-3 mt-1"
 							/>
 						</div>
+
+						<Link
+							to="/forget-password"
+							className="flex flex-row justify-end -mt-2 mb-2"
+						>
+							<span className="text-xs text-secondary underline cursor-pointer">
+								Forget password
+							</span>
+						</Link>
+
 						<Button loading={signupLoading || isSubmitting} type="submit">
 							Login
 						</Button>
