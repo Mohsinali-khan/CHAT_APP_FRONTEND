@@ -1,8 +1,8 @@
 const CustomSidebarLoader = () => {
-	const generateDummyUsers = [...Array(9)];
+	const generateDummyUsers = [...Array(6)];
 
 	return (
-		<>
+		<div className="ms-3.5">
 			{generateDummyUsers.map(() => (
 				<div className=" flex items-center my-3 animate-pulse">
 					<div>
@@ -11,7 +11,7 @@ const CustomSidebarLoader = () => {
 					</div>
 				</div>
 			))}
-		</>
+		</div>
 	);
 };
 

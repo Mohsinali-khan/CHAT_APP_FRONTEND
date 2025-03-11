@@ -1,16 +1,24 @@
+import { User } from "./auth";
+
+export interface API_Response {
+	success: boolean;
+	message: string;
+	data: {
+		users: User[];
+	};
+}
+
 export interface Message {
-    sender: string;
-    message: string;
-    time: string;
-    profilePic: string;
-    isSent: boolean;
-  }
+	_id: string;
+	senderId: string;
+	receiverId: string;
+	text: string;
+	createdAt: string;
+	updatedAt: string;
+}
 
-
-  export interface ChatMessageProps {
-    sender: string;
-    message: string;
-    time: string;
-    profilePic: string;
-    isSent: boolean;
-  }
+export interface MessageResponse {
+	success: boolean;
+	message: string;
+	data: any[];
+}

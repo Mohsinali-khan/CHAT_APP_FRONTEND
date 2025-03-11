@@ -9,5 +9,7 @@ export const AUTH_ENDPOINTS = {
 };
 
 export const MESSAGE_ENDPOINTS = {
-	GET_ALL_USERS: "/auth/getallusers",
+	GET_ALL_USERS: "/message/getallusers",
+	GET_SELECTED_USER_MSG: "/message/",
+	SEND_MESSAGE: "/message/",
 };

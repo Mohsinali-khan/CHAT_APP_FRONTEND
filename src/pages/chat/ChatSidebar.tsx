@@ -2,71 +2,31 @@ import { useEffect } from "react";
 import CustomSidebarLoader from "../../components/skeleton/CustomSidebarLoader";
 import { useMessageStore } from "../../store/messageStore";
 
-interface UserPic {
-	profile_picture_url: string;
-	status: "online" | "offline";
-}
-
-export const randomUserPics: UserPic[] = [
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/men/1.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/women/2.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/men/3.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/women/4.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/men/5.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/women/6.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/men/7.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/women/8.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/men/9.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-	{
-		profile_picture_url: "https://randomuser.me/api/portraits/women/10.jpg",
-		status: Math.random() > 0.5 ? "online" : "offline",
-	},
-];
-
 const ChatSidebar: React.FC = () => {
-	const { getAllUsers, AllUsers, getAllUsersLoading } = useMessageStore();
+	const { getAllUsers, AllUsers, getAllUsersLoading, getCurrentUserMessages } =
+		useMessageStore();
 
 	useEffect(() => {
 		getAllUsers();
 	}, []);
 
 	if (getAllUsersLoading) return <CustomSidebarLoader />;
-
 	if (!AllUsers) return;
+
+	const selectUser = async (id: string) => {
+		await getCurrentUserMessages(id);
+	};
 
 	return (
 		<div
-			className={`flex flex-row snap-x snap-mandatory  justify-between items-center md:flex-col `}
+			className={`flex flex-row snap-x snap-mandatory gap-4 px-3 md:px-0 md:gap-0  justify-start items-center md:flex-col `}
 		>
 			{AllUsers.map((user, index) => (
-				<div key={index} className="flex items-center">
+				<div
+					onClick={() => selectUser(user._id)}
+					key={index}
+					className="flex items-center"
+				>
 					<div>
 						<img
 							alt={`Profile picture of User ${index + 1}`}

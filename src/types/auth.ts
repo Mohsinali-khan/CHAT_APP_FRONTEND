@@ -2,7 +2,6 @@ export type User = {
 	username: string;
 	email: string;
 	profilePic: string;
-	otpVerified: boolean;
 	_id: string;
 	__v: number;
 };
