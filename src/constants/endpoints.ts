@@ -7,3 +7,7 @@ export const AUTH_ENDPOINTS = {
 	FORGET_PASSWORD: "/auth/forget-password",
 	RESET_PASSWORD: "/auth/reset-password",
 };
+
+export const MESSAGE_ENDPOINTS = {
+	GET_ALL_USERS: "/auth/getallusers",
+};

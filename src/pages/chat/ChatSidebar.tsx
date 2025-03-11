@@ -1,4 +1,6 @@
+import { useEffect } from "react";
 import CustomSidebarLoader from "../../components/skeleton/CustomSidebarLoader";
+import { useMessageStore } from "../../store/messageStore";
 
 interface UserPic {
 	profile_picture_url: string;
@@ -49,22 +51,33 @@ export const randomUserPics: UserPic[] = [
 ];
 
 const ChatSidebar: React.FC = () => {
+	const { getAllUsers, AllUsers, getAllUsersLoading } = useMessageStore();
+
+	useEffect(() => {
+		getAllUsers();
+	}, []);
+
+	if (getAllUsersLoading) return <CustomSidebarLoader />;
+
+	if (!AllUsers) return;
+
 	return (
 		<div
 			className={`flex flex-row snap-x snap-mandatory  justify-between items-center md:flex-col `}
 		>
-			{randomUserPics.map((user, index) => (
+			{AllUsers.map((user, index) => (
 				<div key={index} className="flex items-center">
 					<div>
 						<img
 							alt={`Profile picture of User ${index + 1}`}
 							className="w-10 h-10 border hover:border-2 hover:border-dashed border-white object-cover rounded-full"
-							src={user.profile_picture_url}
+							src={
+								user.profilePic ||
+								"https://randomuser.me/api/portraits/men/7.jpg"
+							}
 						/>
 						<div
-							className={`relative -top-3 -right-8 w-2.5 h-2.5  rounded-full ${
-								user.status === "online" ? "bg-green-500" : "bg-gray-300"
-							}`}
+							className={`relative -top-3 -right-8 w-2.5 h-2.5  rounded-full ${"bg-green-500"}`}
 						></div>
 					</div>
 				</div>

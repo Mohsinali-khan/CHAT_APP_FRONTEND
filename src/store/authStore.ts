@@ -159,11 +159,14 @@ export const useAuthStore = create<AuthState>((set) => {
 					}
 				);
 				toast.success(data.message);
-				return { success: true, message: "Logged out successfully!" };
+				return {
+					success: true,
+					message: data.message || "Password reset successfully!",
+				};
 			} catch (error) {
-				const errMsg = handleError(error, "Logout failed");
+				const errMsg = handleError(error, "Reset password failed");
 				toast.error(errMsg);
-				return { success: false, message: handleError(error, "Logout failed") };
+				return { success: false, message: errMsg }; // Fixed the error message
 			} finally {
 				setLoading("resetPasswordloading", false);
 			}
