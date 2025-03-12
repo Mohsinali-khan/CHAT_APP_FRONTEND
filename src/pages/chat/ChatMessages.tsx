@@ -9,11 +9,11 @@ const ChatMessages: React.FC = () => {
 	if (selectedUserLoading)
 		return (
 			<div className="flex flex-row justify-center h-screen items-center">
-				<Loader2 className="size-10 animate-spin" />
+				<Loader2 className="size-10  text-primary animate-spin" />
 			</div>
 		);
 	return (
-		<div className="  overflow-y-scroll p-4 space-y-4">
+		<div className="overflow-y-auto h-screen p-4 space-y-4">
 			{messages && messages.map((msg) => <ChatMessage {...msg} />)}
 		</div>
 	);
