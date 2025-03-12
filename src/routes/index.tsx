@@ -3,7 +3,6 @@ import {
 	Route,
 	Routes,
 	Navigate,
-	Link,
 } from "react-router-dom";
 import SignupForm from "../pages/signup";
 import LoginForm from "../pages/login";
